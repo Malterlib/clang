@@ -18,12 +18,19 @@
 #include "llvm/Config/llvm-config.h"
 #include "llvm/Support/Path.h"
 #include "llvm/Support/Program.h"
+#include "llvm/Support/FileSystem.h"
 #include <cstdio>
 
 #ifdef __CYGWIN__
 #include <cygwin/version.h>
 #include <sys/cygwin.h>
 #define LLVM_ON_WIN32 1
+#endif
+
+#if !defined(_MSC_VER) && !defined(__MINGW32__)
+#include <unistd.h>
+#else
+#include <io.h>
 #endif
 
 #ifdef LLVM_ON_WIN32
@@ -66,8 +73,14 @@ const std::string &CIndexer::getClangResourcesPath() {
   if (dladdr((void *)(uintptr_t)clang_createTranslationUnit, &info) == 0)
     llvm_unreachable("Call to dladdr() failed");
 
+  int FD;
+  SmallString<128> RealPath;
+  if (!llvm::sys::fs::openFileForRead(info.dli_fname, FD, &RealPath))
+    close(FD);
+  else
+    RealPath = info.dli_fname;
   // We now have the CIndex directory, locate clang relative to it.
-  LibClangPath += llvm::sys::path::parent_path(info.dli_fname);
+  LibClangPath += llvm::sys::path::parent_path(RealPath);
 #endif
 
   llvm::sys::path::append(LibClangPath, "clang", CLANG_VERSION_STRING);
