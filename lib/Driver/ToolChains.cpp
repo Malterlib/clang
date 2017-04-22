@@ -2940,8 +2940,10 @@ bool Generic_GCC::IsIntegratedAssemblerDefault() const {
 void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
                                                ArgStringList &CC1Args) const {
   if (DriverArgs.hasArg(options::OPT_nostdlibinc) ||
-      DriverArgs.hasArg(options::OPT_nostdincxx))
+      DriverArgs.hasArg(options::OPT_nostdincxx)) {
+    GetCXXStdlibType(DriverArgs);
     return;
+  }
 
   switch (GetCXXStdlibType(DriverArgs)) {
   case ToolChain::CST_Libcxx: {
@@ -3929,8 +3931,10 @@ Tool *Solaris::buildLinker() const { return new tools::solaris::Linker(*this); }
 void Solaris::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
                                            ArgStringList &CC1Args) const {
   if (DriverArgs.hasArg(options::OPT_nostdlibinc) ||
-      DriverArgs.hasArg(options::OPT_nostdincxx))
+      DriverArgs.hasArg(options::OPT_nostdincxx)) {
+    GetCXXStdlibType(DriverArgs);
     return;
+  }
 
   // Include the support directory for things like xlocale and fudged system
   // headers.
