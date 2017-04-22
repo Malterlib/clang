@@ -2801,8 +2801,8 @@ void Sema::DeclareGlobalAllocationFunction(DeclarationName Name,
     Alloc->setVisibleDespiteOwningModule();
 
     // Implicit sized deallocation functions always have default visibility.
-    Alloc->addAttr(
-        VisibilityAttr::CreateImplicit(Context, VisibilityAttr::Default));
+//    Alloc->addAttr(
+//        VisibilityAttr::CreateImplicit(Context, VisibilityAttr::Default));
 
     llvm::SmallVector<ParmVarDecl *, 3> ParamDecls;
     for (QualType T : Params) {
