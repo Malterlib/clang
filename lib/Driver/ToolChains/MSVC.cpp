@@ -433,6 +433,10 @@ void visualstudio::Linker::ConstructJob(Compilation &C, const JobAction &JA,
   }
 
   // Add filenames, libraries, and other linker inputs.
+
+  if (const Arg *A = Args.getLastArg(options::OPT_first_object))
+    CmdArgs.push_back(A->getValue());
+
   for (const auto &Input : Inputs) {
     if (Input.isFilename()) {
       CmdArgs.push_back(Input.getFilename());
