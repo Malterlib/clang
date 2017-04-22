@@ -146,7 +146,12 @@ void BareMetal::AddClangCXXStdlibIncludeArgs(
 
 void BareMetal::AddCXXStdlibLibArgs(const ArgList &Args,
                                     ArgStringList &CmdArgs) const {
-  switch (GetCXXStdlibType(Args)) {
+  CXXStdlibType Type = GetCXXStdlibType(Args);
+
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
+
+  switch (Type) {
   case ToolChain::CST_Libcxx:
     CmdArgs.push_back("-lc++");
     CmdArgs.push_back("-lc++abi");
