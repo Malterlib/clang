@@ -1093,7 +1093,7 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
   }
   if (isa<PrecompileJobAction>(JA) && YcIndex != -1) {
     Driver::InputList Inputs;
-    D.BuildInputs(getToolChain(), C.getArgs(), Inputs);
+    D.BuildInputs(getToolChain(), C.getArgs(), Inputs, C);
     assert(Inputs.size() == 1 && "Need one input when building pch");
     CmdArgs.push_back(Args.MakeArgString(Twine("-find-pch-source=") +
                                          Inputs[0].second->getValue()));
