@@ -748,6 +748,9 @@ void DarwinClang::AddCXXStdlibLibArgs(const ArgList &Args,
                                       ArgStringList &CmdArgs) const {
   CXXStdlibType Type = GetCXXStdlibType(Args);
 
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
+
   switch (Type) {
   case ToolChain::CST_Libcxx:
     CmdArgs.push_back("-lc++");
@@ -3147,6 +3150,9 @@ void MipsLLVMToolChain::AddCXXStdlibLibArgs(const ArgList &Args,
   assert((GetCXXStdlibType(Args) == ToolChain::CST_Libcxx) &&
          "Only -lc++ (aka libxx) is suported in this toolchain.");
 
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
+
   CmdArgs.push_back("-lc++");
   CmdArgs.push_back("-lc++abi");
   CmdArgs.push_back("-lunwind");
@@ -3448,6 +3454,10 @@ void NaClToolChain::AddCXXStdlibLibArgs(const ArgList &Args,
   // Check for -stdlib= flags. We only support libc++ but this consumes the arg
   // if the value is libc++, and emits an error for other values.
   GetCXXStdlibType(Args);
+  
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
+
   CmdArgs.push_back("-lc++");
 }
 
@@ -3555,6 +3565,9 @@ std::string CloudABI::findLibCxxIncludePath() const {
 
 void CloudABI::AddCXXStdlibLibArgs(const ArgList &Args,
                                    ArgStringList &CmdArgs) const {
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
+
   CmdArgs.push_back("-lc++");
   CmdArgs.push_back("-lc++abi");
   CmdArgs.push_back("-lunwind");
@@ -3648,6 +3661,12 @@ void Bitrig::addLibStdCxxIncludePaths(const llvm::opt::ArgList &DriverArgs,
 
 void Bitrig::AddCXXStdlibLibArgs(const ArgList &Args,
                                  ArgStringList &CmdArgs) const {
+
+  if (Args.hasArg(options::OPT_nostdlibcxx)) {
+    GetCXXStdlibType(Args);
+    return;
+  }
+    
   switch (GetCXXStdlibType(Args)) {
   case ToolChain::CST_Libcxx:
     CmdArgs.push_back("-lc++");
@@ -3693,6 +3712,9 @@ void FreeBSD::AddCXXStdlibLibArgs(const ArgList &Args,
                                   ArgStringList &CmdArgs) const {
   CXXStdlibType Type = GetCXXStdlibType(Args);
   bool Profiling = Args.hasArg(options::OPT_pg);
+
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
 
   switch (Type) {
   case ToolChain::CST_Libcxx:
@@ -4842,6 +4864,10 @@ std::string Fuchsia::findLibCxxIncludePath() const {
 void Fuchsia::AddCXXStdlibLibArgs(const ArgList &Args,
                                   ArgStringList &CmdArgs) const {
   (void) GetCXXStdlibType(Args);
+
+  if (Args.hasArg(options::OPT_nostdlibcxx))
+    return;
+
   CmdArgs.push_back("-lc++");
   CmdArgs.push_back("-lc++abi");
   CmdArgs.push_back("-lunwind");

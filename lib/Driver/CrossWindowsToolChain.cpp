@@ -95,6 +95,11 @@ AddClangCXXStdlibIncludeArgs(const llvm::opt::ArgList &DriverArgs,
 void CrossWindowsToolChain::
 AddCXXStdlibLibArgs(const llvm::opt::ArgList &DriverArgs,
                     llvm::opt::ArgStringList &CC1Args) const {
+  if (DriverArgs.hasArg(options::OPT_nostdlibcxx)) {
+    GetCXXStdlibType(DriverArgs);
+    return;
+  }
+
   switch (GetCXXStdlibType(DriverArgs)) {
   case ToolChain::CST_Libcxx:
     CC1Args.push_back("-lc++");

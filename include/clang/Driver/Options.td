@@ -1912,6 +1912,8 @@ def nostdinc : Flag<["-"], "nostdinc">;
 def nostdlibinc : Flag<["-"], "nostdlibinc">;
 def nostdincxx : Flag<["-"], "nostdinc++">, Flags<[CC1Option]>,
   HelpText<"Disable standard #include directories for the C++ standard library">;
+def nostdlibcxx : Flag<["-"], "nostdlibc++">, Flags<[CC1Option]>,
+  HelpText<"Disable link of standard libraries for the C++ standard library">;
 def nostdlib : Flag<["-"], "nostdlib">;
 def object : Flag<["-"], "object">;
 def o : JoinedOrSeparate<["-"], "o">, Flags<[DriverOption, RenderAsInput, CC1Option, CC1AsOption]>,
