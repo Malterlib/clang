@@ -265,8 +265,10 @@ AddClangCXXStdlibIncludeArgs(const llvm::opt::ArgList &DriverArgs,
   const std::string &SysRoot = getDriver().SysRoot;
 
   if (DriverArgs.hasArg(options::OPT_nostdinc) ||
-      DriverArgs.hasArg(options::OPT_nostdincxx))
+      DriverArgs.hasArg(options::OPT_nostdincxx)) {
+    GetCXXStdlibType(DriverArgs);
     return;
+  }
 
   switch (GetCXXStdlibType(DriverArgs)) {
   case ToolChain::CST_Libcxx:

@@ -160,10 +160,14 @@ void WebAssembly::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
 
 void WebAssembly::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
                                                ArgStringList &CC1Args) const {
-  if (!DriverArgs.hasArg(options::OPT_nostdlibinc) &&
-      !DriverArgs.hasArg(options::OPT_nostdincxx))
-    addSystemInclude(DriverArgs, CC1Args,
-                     getDriver().SysRoot + "/include/c++/v1");
+  if (DriverArgs.hasArg(options::OPT_nostdlibinc) ||
+      DriverArgs.hasArg(options::OPT_nostdincxx)) {
+    GetCXXStdlibType(DriverArgs);
+    return;
+  }
+
+  addSystemInclude(DriverArgs, CC1Args,
+                   getDriver().SysRoot + "/include/c++/v1");
 }
 
 Tool *WebAssembly::buildLinker() const {

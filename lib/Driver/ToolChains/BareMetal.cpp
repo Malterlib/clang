@@ -144,8 +144,10 @@ void BareMetal::AddClangCXXStdlibIncludeArgs(
     const ArgList &DriverArgs, ArgStringList &CC1Args) const {
   if (DriverArgs.hasArg(options::OPT_nostdinc) ||
       DriverArgs.hasArg(options::OPT_nostdlibinc) ||
-      DriverArgs.hasArg(options::OPT_nostdincxx))
+      DriverArgs.hasArg(options::OPT_nostdincxx)) {
+    GetCXXStdlibType(DriverArgs);
     return;
+  }
 
   std::string Path = findLibCxxIncludePath(GetCXXStdlibType(DriverArgs));
   if (!Path.empty())
