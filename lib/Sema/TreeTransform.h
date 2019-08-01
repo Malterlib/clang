@@ -11056,21 +11056,6 @@ TreeTransform<Derived>::TransformLambdaExpr(LambdaExpr *E) {
         .getModifiedLoc()
         .castAs<FunctionProtoTypeLoc>()
         .getParams();
-    } else if (MacroQualifiedTypeLoc SpecificTL =
-      OldCallTL.getAs<MacroQualifiedTypeLoc>()) {
-      NewType = TransformMacroQualifiedType(
-        NewCallBuilder, SpecificTL);
-      if (NewType.isNull())
-        return ExprError();
-      NewCallOpTSI = NewCallBuilder.getTypeSourceInfo(
-        getSema().Context, NewType);
-      Params = NewCallOpTSI->getTypeLoc()
-        .castAs<MacroQualifiedTypeLoc>()
-        .getInnerLoc()
-        .castAs<AttributedTypeLoc>()
-        .getModifiedLoc()
-        .castAs<FunctionProtoTypeLoc>()
-        .getParams();
     }
 
     UseNewScope = OldUseNewScope;
